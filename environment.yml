@@ -1,0 +1,22 @@
+name: orpheus-tts
+channels:
+  - defaults
+dependencies:
+  - python=3.12.9
+  - pip
+  - pip:
+      - python-dotenv==1.0.1
+      - click==8.1.8
+      - huggingface-hub==0.29.3
+      - numpy==1.26.4
+      - nvidia-cuda-runtime-cu12==12.4.127
+      - nvidia-cudnn-cu12==9.1.0.70
+      - orpheus-speech==0.1.0
+      - snac==1.2.1
+      - tokenizers==0.21.1
+      - torch==2.5.1
+      - torchaudio==2.5.1
+      - torchvision==0.20.1
+      - tqdm==4.67.1
+      - transformers==4.50.0
+      - vllm==0.7.3
