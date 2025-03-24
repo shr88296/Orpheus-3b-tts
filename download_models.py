@@ -12,7 +12,7 @@ if huggingface_token := os.environ.get("HF_TOKEN"):
 # Set model names
 snac_model_name = "hubertsiuzdak/snac_24khz"
 orpheus_model_names = [
-    "canopylabs/orpheus-tts-0.1-pretrained",
+    "canopylabs/orpheus-3b-0.1-pretrained",
     "canopylabs/orpheus-3b-0.1-ft",
 ]
 

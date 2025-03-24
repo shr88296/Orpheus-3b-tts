@@ -1,9 +1,10 @@
 # Orpheus TTS
+
 ## Overview
+
 Orpheus TTS is an open-source text-to-speech system built on the Llama-3b backbone. Orpheus demonstrates the emergent capabilities of using LLMs for speech synthesis. We offer comparisons of the models below to leading closed models like Eleven Labs and PlayHT in our blog post.
 
 [Check out our blog post](https://canopylabs.ai/model-releases)
-
 
 https://github.com/user-attachments/assets/ce17dd3a-f866-4e67-86e4-0025e6e87b8a
 
@@ -22,10 +23,10 @@ We provide three models in this release, and additionally we offer the data proc
 
 2. [**Pretrained**](https://huggingface.co/canopylabs/orpheus-tts-0.1-pretrained) – Our base model trained on 100k+ hours of English speech data
 
-
 ### Inference
 
 #### Simple setup on colab
+
 1. [Colab For Tuned Model](https://colab.research.google.com/drive/1KhXT56UePPUHhqitJNUxq63k-pQomz3N?usp=sharing) (not streaming, see below for realtime streaming) – A finetuned model for everyday TTS applications.
 2. [Colab For Pretrained Model](https://colab.research.google.com/drive/10v9MIEbZOr_3V8ZcPAIh8MN7q2LjcstS?usp=sharing) – This notebook is set up for conditioned generation but can be extended to a range of tasks.
 
@@ -40,12 +41,13 @@ We provide three models in this release, and additionally we offer the data proc
    cd Orpheus-TTS && pip install orpheus-speech # uses vllm under the hood for fast inference
    ```
    vllm pushed a slightly buggy version on March 18th so some bugs are being resolved by reverting to `pip install vllm==0.7.3` after `pip install orpheus-speech`
-4. Run the example below:
+3. Run the example below:
+
    ```python
    from orpheus_tts import OrpheusModel
    import wave
    import time
-   
+
    model = OrpheusModel(model_name ="canopylabs/orpheus-tts-0.1-finetune-prod")
    prompt = '''Man, the way social media has, um, completely changed how we interact is just wild, right? Like, we're all connected 24/7 but somehow people feel more alone than ever. And don't even get me started on how it's messing with kids' self-esteem and mental health and whatnot.'''
 
@@ -84,7 +86,6 @@ We provide three models in this release, and additionally we offer the data proc
 
 Additionally, use regular LLM generation args like `temperature`, `top_p`, etc. as you expect for a regular LLM. `repetition_penalty>=1.1`is required for stable generations. Increasing `repetition_penalty` and `temperature` makes the model speak faster.
 
-
 ## Finetune Model
 
 Here is an overview of how to finetune your model on any text and speech.
@@ -101,16 +102,18 @@ You should start to see high quality results after ~50 examples but for best res
     wandb login <wandb token>
     accelerate launch train.py
    ```
+
 ### Additional Resources
+
 1. [PEFT finetuning with unsloth](https://github.com/unslothai/notebooks/pull/17/files)
-   
+
 ## Pretrain Model
 
 This is a very simple process analogous to training an LLM using Trainer and Transformers.
 
 The base model provided is trained over 100k hours. I recommend not using synthetic data for training as it produces worse results when you try to finetune specific voices, probably because synthetic voices lack diversity and map to the same set of tokens when tokenised (i.e. lead to poor codebook utilisation).
 
-We train the 3b model on sequences of length 8192 - we use the same dataset format for TTS finetuning for the <TTS-dataset> pretraining. We chain input_ids sequences together for more efficient training. The text dataset required is in the form described in this issue [#37 ](https://github.com/canopyai/Orpheus-TTS/issues/37). 
+We train the 3b model on sequences of length 8192 - we use the same dataset format for TTS finetuning for the <TTS-dataset> pretraining. We chain input_ids sequences together for more efficient training. The text dataset required is in the form described in this issue [#37 ](https://github.com/canopyai/Orpheus-TTS/issues/37).
 
 If you are doing extended training this model, i.e. for another language or style we recommend starting with finetuning only (no text dataset). The main idea behind the text dataset is discussed in the blog post. (tldr; doesn't forget too much semantic/reasoning ability so its able to better understand how to intone/express phrases when spoken, however most of the forgetting would happen very early on in the training i.e. <100000 rows), so unless you are doing very extended finetuning it may not make too much of a difference.
 
@@ -122,10 +125,13 @@ While we can't verify these implementations are completely accurate/bug free, th
 2. [Open AI compatible Fast-API implementation](https://github.com/Lex-au/Orpheus-FastAPI)
 3. [Gradio WebUI that runs smoothly on WSL and CUDA](https://github.com/Saganaki22/OrpheusTTS-WebUI)
 
-
 # Checklist
 
 - [x] Release 3b pretrained model and finetuned models
 - [ ] Release pretrained and finetuned models in sizes: 1b, 400m, 150m parameters
 - [ ] Fix glitch in realtime streaming package that occasionally skips frames.
 - [ ] Fix voice cloning Colab notebook implementation
+
+### Local Notes
+
+I prefer to download the models into the repository with `HF_HOME=$PWD/models python3 download_models.py`. Therefore any script should be executed with the prefix `HF_HOME=$PWD/models` so that the models can be located by hugginface.

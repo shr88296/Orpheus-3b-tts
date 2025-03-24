@@ -22,5 +22,22 @@
             },
             "console": "integratedTerminal"
         },
+        {
+            "name": "stream",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "generation/stream.py",
+            "env": {
+                "HF_HOME": "${workspaceFolder}/models",
+                "TORCH_HOME": "${workspaceFolder}/models",
+            },
+            "args": [
+                "--model-name=canopylabs/orpheus-3b-0.1-ft",
+                "--voice=tara",
+                "--output=out/test.wav",
+                "--prompt=Man, the way social media has, um, completely changed how we interact is just wild, right? Like, we're all connected 24/7 but somehow people feel more alone than ever. And don't even get me started on how it's messing with kids' self-esteem and mental health and whatnot."
+            ],
+            "console": "integratedTerminal"
+        },
     ]
 }
