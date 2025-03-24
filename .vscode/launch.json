@@ -9,6 +9,10 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
+            "env": {
+                "HF_HOME": "${workspaceFolder}/models",
+                "TORCH_HOME": "${workspaceFolder}/models",
+            },
             "console": "integratedTerminal"
         },
         {
