@@ -132,6 +132,6 @@ While we can't verify these implementations are completely accurate/bug free, th
 - [ ] Fix glitch in realtime streaming package that occasionally skips frames.
 - [ ] Fix voice cloning Colab notebook implementation
 
-### Local Notes
+# Local Notes
 
 I prefer to download the models into the repository with `HF_HOME=$PWD/models python3 download_models.py`. Therefore any script should be executed with the prefix `HF_HOME=$PWD/models` so that the models can be located by hugginface.
