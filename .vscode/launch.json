@@ -43,5 +43,24 @@
             ],
             "console": "integratedTerminal"
         },
+        {
+            "name": "generate finetuned",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "generation/generate_finetuned.py",
+            "env": {
+                "HF_HOME": "${workspaceFolder}/models",
+                "TORCH_HOME": "${workspaceFolder}/models",
+            },
+            "args": [
+                "--model-name=canopylabs/orpheus-3b-0.1-ft",
+                "--voice=tara",
+                "--output=out/test.wav",
+                "Hey there my name is Tara, <chuckle> and I'm a speech generation model that can sound like a person.",
+                "I've also been taught to understand and produce paralinguistic things like sighing, or chuckling, or yawning!",
+                "I live in San Francisco, and have, uhm let's see, 3 billion 7 hundred ... well, lets just say a lot of parameters."
+            ],
+            "console": "integratedTerminal"
+        }
     ]
 }
