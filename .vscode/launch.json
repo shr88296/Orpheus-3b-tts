@@ -61,6 +61,19 @@
                 "I live in San Francisco, and have, uhm let's see, 3 billion 7 hundred ... well, lets just say a lot of parameters."
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "process audio",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "dataset/process_audio.py",
+            "args": [
+                "--audio=../../Downloads/wiener sounds/The Application of Physics to Medicine (1953) - edit.flac",
+                "--transcription=../../Downloads/wiener sounds/The Application of Physics to Medicine (1953) - edit.json",
+                "--output=out/wiener_medicine.parquet",
+                "--max-length=14.0"
+            ],
+            "console": "integratedTerminal"
         }
     ]
 }
