@@ -2,7 +2,7 @@ from typing import Optional
 from snac import SNAC
 import torch
 import numpy as np
-import wave
+import soundfile as sf
 import os
 import click
 from dotenv import load_dotenv
@@ -13,8 +13,8 @@ from huggingface_hub import login, snapshot_download
 # fmt: off
 @click.command()
 @click.option("--model-name", "-m", type=str, default="canopylabs/orpheus-3b-0.1-ft", help="Model name/path on HuggingFace")
-@click.option("--voice", "-v", help="Voice to use (see github for available voices)")
-@click.option("--output", "-o", default="output.wav", help="Output WAV file path (will be modified with number)")
+@click.option("--voice", "-v", type=str, help="Voice to use (see github for available voices)")
+@click.option("--output", "-o", type=click.Path(dir_okay=False), default="output.wav", help="Output WAV file path (will be modified with number)")
 @click.argument("prompts", nargs=-1, required=True)
 # fmt: on
 def generate_speech(
@@ -200,17 +200,15 @@ def generate_speech(
             output_root, output_ext = os.path.splitext(output)
             output_filename = f"{output_root}_{str(i).zfill(number_width)}{output_ext}"
 
-            # Convert to int16 format (common for WAV files)
-            samples = (
-                (samples.detach().squeeze().to("cpu") * 32767).numpy().astype(np.int16)
-            )
+            # Convert to the appropriate format
+            samples = samples.detach().squeeze().to("cpu").numpy()
 
-            # Open WAV file for writing
-            with wave.open(output_filename, "wb") as wf:
-                wf.setnchannels(1)  # Mono audio
-                wf.setsampwidth(2)  # 2 bytes per sample (16-bit)
-                wf.setframerate(24000)  # 24kHz sample rate (SNAC model output rate)
-                wf.writeframes(samples.tobytes())
+            # Save using soundfile - automatically handles format based on extension
+            sf.write(
+                output_filename,
+                samples,
+                24000,  # Sample rate
+            )
 
             click.echo(f"Saved audio sample {i} to {output_filename}")
 
