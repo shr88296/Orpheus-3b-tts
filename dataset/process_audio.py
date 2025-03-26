@@ -11,21 +11,23 @@ from tqdm import tqdm
 @click.option('--audio', '-a', type=click.Path(exists=True, dir_okay=False), required=True, help='Path to the audio file')
 @click.option('--transcription', '-t', type=click.Path(exists=True, dir_okay=False), required=True, help='Path to the transcription JSON file')
 @click.option('--output', '-o', type=click.Path(dir_okay=False), default='segmented_data.parquet', help='Output parquet file path')
-@click.option('--sample-rate', '-sr', default=24000, type=int, help='Target sample rate in Hz')
+@click.option('--sample-rate', '-sr', type=int, help='Target sample rate in Hz (orpheus needs 24000)')
 @click.option('--max-length', '-ml', type=float, help='Max audio snippet length (snippets that are longer will be discarded)')
 # fmt: on
 def process_audio_with_transcription(
     audio: str,
     transcription: str,
     output: str,
-    sample_rate: int,
+    sample_rate: Optional[int],
     max_length: Optional[float],
 ):
     """Process audio file with JSON transcription from whisperx and save segments as parquet dataset."""
 
-    click.echo(f"Loading audio at {sample_rate}Hz sample rate...")
+    click.echo(
+        f"Loading audio at {f'{sample_rate}Hz' if sample_rate else 'original'} sample rate..."
+    )
     # Load audio file directly at the target sample rate
-    audio_data, _ = librosa.load(
+    audio_data, sample_rate = librosa.load(
         audio, sr=sample_rate, mono=True  # Target sample rate  # Ensure mono audio
     )
 

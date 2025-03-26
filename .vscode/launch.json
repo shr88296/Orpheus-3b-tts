@@ -71,6 +71,7 @@
                 "--audio=../../Downloads/wiener sounds/The Application of Physics to Medicine (1953) - edit.flac",
                 "--transcription=../../Downloads/wiener sounds/The Application of Physics to Medicine (1953) - edit.json",
                 "--output=out/wiener_medicine.parquet",
+                "--sample-rate=24000",
                 "--max-length=14.0"
             ],
             "console": "integratedTerminal"
