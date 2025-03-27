@@ -74,6 +74,12 @@ We provide three models in this release, and additionally we offer the data proc
       end_time = time.monotonic()
       print(f"It took {end_time - start_time} seconds to generate {duration:.2f} seconds of audio")
    ```
+#### Additional Functionality
+
+1. Watermark your audio: Use Silent Cipher to watermark your audio generation; see [Watermark Audio Implementation](additional_inference_options/watermark_audio) for implementation.
+
+2. For No GPU inference using Llama cpp see implementation [documentation](additional_inference_options/no_gpu/README.md) for implementation example
+
 
 #### Prompting
 
@@ -123,7 +129,8 @@ While we can't verify these implementations are completely accurate/bug free, th
 
 1. [A lightweight client for running Orpheus TTS locally using LM Studio API](https://github.com/isaiahbjork/orpheus-tts-local)
 2. [Open AI compatible Fast-API implementation](https://github.com/Lex-au/Orpheus-FastAPI)
-3. [Gradio WebUI that runs smoothly on WSL and CUDA](https://github.com/Saganaki22/OrpheusTTS-WebUI)
+3. [HuggingFace Space kindly set up by MohamedRashad](https://huggingface.co/spaces/MohamedRashad/Orpheus-TTS)
+4. [Gradio WebUI that runs smoothly on WSL and CUDA](https://github.com/Saganaki22/OrpheusTTS-WebUI)
 
 # Checklist
 
