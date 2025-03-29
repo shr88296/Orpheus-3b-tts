@@ -15,6 +15,7 @@ dependencies:
       - orpheus-speech==0.1.0
       - peft==0.15.0 # for LoRA?
       - python-dotenv==1.0.1
+      - renumics-spotlight==1.6.13
       - snac==1.2.1
       - soundfile==0.13.1
       - tokenizers==0.21.1
