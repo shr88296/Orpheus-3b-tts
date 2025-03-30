@@ -7,11 +7,12 @@ import queue
 from .decoder import tokens_decoder_sync
 
 class OrpheusModel:
-    def __init__(self, model_name, dtype=torch.bfloat16):
+    def __init__(self, model_name, dtype=torch.bfloat16, max_model_len=52000):
         self.model_name = self._map_model_params(model_name)
         self.dtype = dtype
+        self.max_model_len = max_model_len
         self.engine = self._setup_engine()
-        self.available_voices = ["zoe", "zac","jess", "leo", "mia", "julia", "leah"]
+        self.available_voices = ["tara", "zoe", "zac","jess", "leo", "mia", "julia", "leah"]
         self.tokeniser = AutoTokenizer.from_pretrained(model_name)
 
     
@@ -42,6 +43,7 @@ class OrpheusModel:
         engine_args = AsyncEngineArgs(
             model=self.model_name,
             dtype=self.dtype,
+            max_model_len = self.max_model_len
         )
         return AsyncLLMEngine.from_engine_args(engine_args)
     
