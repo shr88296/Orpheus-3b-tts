@@ -25,8 +25,7 @@ const orpheus = await OrpheusModel({
 });
 
 // Create a new audio stream
-const prompt =
-  "Hey there my name is Tara, <chuckle> and I'm a speech generation model that can sound like a person.";
+const prompt = "Hey there my name is Tara, <chuckle> and I'm a speech generation model that can sound like a person.";
 const voice = "tara";
 const stream = orpheus.generate_speech({ prompt, voice });
 
