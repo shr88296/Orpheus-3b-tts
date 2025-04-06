@@ -41,6 +41,12 @@
     "prettier": "3.4.2",
     "typescript": "^5.8.2"
   },
+  "files": [
+    "types",
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "publishConfig": {
     "access": "public"
   },
