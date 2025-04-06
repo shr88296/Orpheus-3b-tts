@@ -40,5 +40,10 @@
     "esbuild": "0.25.2",
     "prettier": "3.4.2",
     "typescript": "^5.8.2"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jsdelivr": "./dist/orpheus.js",
+  "unpkg": "./dist/orpheus.js"
 }
