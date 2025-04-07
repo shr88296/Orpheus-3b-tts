@@ -1,8 +1,6 @@
 import asyncio
 import torch
-import os
 from vllm import AsyncLLMEngine, AsyncEngineArgs, SamplingParams
-from transformers import AutoTokenizer
 import threading
 import queue
 from .decoder import tokens_decoder_sync
@@ -15,7 +13,8 @@ class OrpheusModel:
         self.available_voices = ["zoe", "zac","jess", "leo", "mia", "julia", "leah"]
         
         self.engine = self._setup_engine()
-        # Get the vLLM tokenizer using asyncio
+        
+        # Get the vLLM tokenizer
         self.tokenizer = asyncio.run(self.engine.get_tokenizer())
     
 
