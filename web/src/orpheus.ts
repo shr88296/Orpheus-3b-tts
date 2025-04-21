@@ -144,14 +144,9 @@ class AudioStream implements AsyncGenerator<RawAudio, void, unknown> {
     console.log("AudioWorkletNode connected");
     const startTime = performance.now();
     const unprocessed = [];
-    // let firstChunk = true;
-    // let minSamples = Math.floor(
     const minSamples = (initialBufferMs / 1000) * SAMPLING_RATE;
     for await (const chunk of this) {
-      console.log(performance.now(), startTime, playbackDelayMs);
-      console.log(this.samples, minSamples);
       if (performance.now() - startTime < playbackDelayMs || this.samples < minSamples) {
-        console.log("buffering", this.samples, minSamples);
         // We aren't ready to start, or we haven't received enough audio data yet.
         unprocessed.push(chunk);
         continue;
@@ -159,22 +154,14 @@ class AudioStream implements AsyncGenerator<RawAudio, void, unknown> {
       // We have enough audio data to start playing.
       if (unprocessed.length > 0) {
         for (const prevChunk of unprocessed) {
-          console.log("playing buffered chunk", prevChunk.audio.length);
           node.port.postMessage(prevChunk.audio);
         }
         unprocessed.length = 0;
       }
 
-      console.log("playing chunk", chunk.audio.length);
       // Send the audio data to the AudioWorkletNode.
       node.port.postMessage(chunk.audio);
-      // firstChunk = false;
     }
-    // await context.suspend();
-    // console.log("AudioWorkletNode disconnected");
-    // node.disconnect();
-    // context.close();
-    // console.log("AudioContext closed");
   }
 }
 
@@ -264,16 +251,6 @@ export async function OrpheusModel({
     const prompt_string = _format_prompt({ prompt, voice });
     const inputs = tokenizer(prompt_string);
 
-    // breaks with:
-    // const tokens = [128000, 128556, 135321, 138033, 144122, 145829, 152326, 156371].map(BigInt);
-    // const tokens = [128000, 128556, 135321, 138033, 144122, 145829, 152326, 156371, 129243, 135573, 137158, 144432, 147095, 151924, 154673, 130929, 133382, 139507, 143500, 146638, 150913, 153607, 129214, 132827, 139739, 140758, 147587, 150936, 154152, 129411, 132395, 139127, 143222, 145115, 151423, 153755, 132028, 134350, 139947, 142660, 146723, 151495, 154993, 128542, 135547, 137803, 144505, 147302, 150058, 154460, 131220, 134065, 136578, 141886, 147031, 150054, 156289, 132262, 134894, 140054, 141327, 146645, 149819, 154300, 131175, 133315, 137029, 142885, 145936, 148940, 153288, 129603, 135555, 139287, 143656, 145787, 150375, 155626, 131607, 133070, 137309, 141833, 146944, 152570, 153761, 129379, 134291, 138102, 140654, 144757, 152280, 156162, 130860, 132786, 137297, 143014, 146932, 151557, 156079, 132216, 135389, 136977, 143972, 146087, 152318, 153196, 128669, 133786, 140190, 141739, 147677, 151506, 156800, 130763, 135025, 140016, 140856, 148006, 150862, 154636, 130225, 133799, 140163, 143149, 146062, 150397, 155620, 132068, 136258, 137782, 142362, 145393, 151907, 153877, 129619, 133750, 139002, 144615, 146390, 150666, 154801, 128381, 133168, 137409, 143058, 148705, 149024, 153558, 131181, 136148, 136465, 143704, 146245, 151666, 153030, 130315, 135227, 139526, 142244, 147698, 150777, 155564, 128446, 135167, 137483, 142720, 146262, 150319, 153523, 130839, 136420, 138381, 144445, 148656, 148842, 155902, 129804, 135268, 139325, 143421, 144752, 151159, 155962, 130014, 132791, 138871, 140922, 148322, 149060, 154962, 128285, 136342, 138775, 141128, 148068, 150426, 153802, 128258].map(BigInt);
-    // for (const token of tokens) {
-    //   yield token;
-    //   await new Promise(resolve => setTimeout(resolve, 5));
-    // }
-    // return tokens;
-
-    // return;
     const queue = new AsyncQueue<bigint | null>();
     const streamer = new OrpheusStreamer(queue);
     const generated_ids = llm.generate({
@@ -296,7 +273,6 @@ export async function OrpheusModel({
       temp.push(value);
       yield value;
     }
-    // console.log(temp.length, JSON.stringify(temp.map((t) => Number(t))));
     return await generated_ids;
   }
 
