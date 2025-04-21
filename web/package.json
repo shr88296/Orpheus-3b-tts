@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/canopyai/orpheus-tts#readme",
   "dependencies": {
-    "@huggingface/transformers": "^3.4.2"
+    "@huggingface/transformers": "^3.5.0"
   },
   "devDependencies": {
     "@types/audioworklet": "^0.0.72",
