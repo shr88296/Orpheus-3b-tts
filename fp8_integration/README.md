@@ -22,8 +22,7 @@ FP8 requires specific NVIDIA GPU architectures for hardware acceleration:
 
 ```
 fp8_integration/
-├── quantization/          # FP8 model quantization scripts
-│   └── quantize_to_fp8.py
+├── quantization/          # (removed) FP8 PTQ scripts – vLLM FP8 is runtime-only
 ├── inference/            # FP8 inference implementation
 │   └── orpheus_fp8_engine.py
 ├── validation/           # Audio quality validation tools
@@ -46,24 +45,21 @@ pip install llmcompressor vllm>=0.5.0 transformers torch whisper librosa soundfi
 nvcc --version
 ```
 
-### Step 1: Quantize Model to FP8
+### Step 1: Enable FP8 in vLLM (runtime)
 
-First, convert the BF16 Orpheus model to FP8 format:
+vLLM’s FP8 is enabled at load time; no offline FP8 checkpoint is needed. Example:
 
-```bash
-cd fp8_integration
-python quantization/quantize_to_fp8.py \
-    --model-path canopylabs/orpheus-3b-0.1-ft \
-    --output-path ./orpheus-3b-fp8 \
-    --num-calibration-samples 512 \
-    --fp8-format fp8_e4m3
+```python
+from vllm import LLM
+
+llm = LLM(
+    model="canopylabs/orpheus-3b-0.1-ft",
+    quantization="fp8",
+    kv_cache_dtype="fp8",
+    dtype="auto",
+    max_model_len=4096,
+)
 ```
-
-Options:
-- `--fp8-format`: Choose between `fp8_e4m3` (higher precision) or `fp8_e5m2` (wider range)
-- `--num-calibration-samples`: Number of samples for calibration (more = better quality)
-- `--no-quantize-kv-cache`: Disable KV cache quantization if needed
-- `--quantize-all-layers`: Quantize embeddings and lm_head (not recommended)
 
 ### Step 2: Run FP8 Inference
 
